@@ -99,19 +99,16 @@ LinearComplexity(int M, int n)
 			nu[6]++;
 	}
 	chi2 = 0.00;
-	for ( i=0; i<K+1; i++ ) 
-		fprintf(stats[TEST_LINEARCOMPLEXITY], "%4d ", (int)nu[i]);
+
 	for ( i=0; i<K+1; i++ )
 		chi2 += pow(nu[i]-N*pi[i], 2) / (N*pi[i]);
 	p_value = cephes_igamc(K/2.0, chi2/2.0);
 
-    return p_value < ALPHA ? false : true;
-
-	fprintf(stats[TEST_LINEARCOMPLEXITY], "%9.6f%9.6f\n", chi2, p_value); fflush(stats[TEST_LINEARCOMPLEXITY]);
-	fprintf(results[TEST_LINEARCOMPLEXITY], "%f\n", p_value); fflush(results[TEST_LINEARCOMPLEXITY]);
 
 	free(B_);
 	free(P);
 	free(C);
 	free(T);
+
+    return p_value < ALPHA ? false : true;
 }

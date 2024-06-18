@@ -1,37 +1,68 @@
 #include <iostream>
+#include <array>
+#include <vector>
 
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
 
+#include <randomAllCheck.h>
+#include "defs.h"
 
-#include <cephes.h>
-#include <decls.h>
-#include <utilities.h>
+std::string streamFile = "/home/trafalgar/RandomCheck/test.dat";
+
+void testOutFactory() {
+  // std::array<int, NUMOFTESTS> testRandomArray = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+  std::vector<int> testRandomArray{1, 5, 6, 9, 10, 12, 13, 14, 15};
+  
+
+  if(randomAllCheck(OutFactory, 1000000, streamFile, testRandomArray.data(), testRandomArray.size())) {
+    std::cout << "test passed" << std::endl;
+  }else{
+    std::cout << "test failed" << std::endl;
+  }
+}
+
+void testBootup() {
+  std::array<int, NUMOFTESTS> testRandomArray = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+
+  if(randomAllCheck(Bootup, 1000000,streamFile, testRandomArray.data(), testRandomArray.size())) {
+    std::cout << "test passed" << std::endl;
+  }else{
+    std::cout << "test failed" << std::endl;
+  }
+}
+
+void testSingleTest() {
+  std::array<int, NUMOFTESTS> testRandomArray = {11};
+
+  if(randomAllCheck(Bootup, 256,streamFile, testRandomArray.data(), testRandomArray.size())) {
+    std::cout << "test passed" << std::endl;
+  }else{
+    std::cout << "test failed" << std::endl;
+  }
+}
 
 
 int main(int argc, const char **argv) {
 
-  bits_length = std::atoi(argv[1]); // arg2
-  std::string streamFile = argv[2]; // arg 1
+  int test = std::atoi(argv[1]);
 
-//   tp.blockFrequencyBlockLength = 128; // nist
-  tp.blockFrequencyBlockLength = 100; // gm
-  tp.overlappingTemplateBlockLength = 9;
-  tp.approximateEntropyBlockLength = 10;
-  tp.linearComplexitySequenceLength = 500;
-  tp.numOfBitStreams = 1;    // arg 2
-
-  int option = 0;
-
-  // chooseTests
-  // 目前每个都测试
-  for (int i = 1; i <= NUMOFTESTS; i++) {
-    testVector[i] = 1;
+  switch (test) {
+    case 1:{
+      testOutFactory();
+      break;
+    }
+    case 2:{
+      testBootup();
+      break;
+    }
+    case 3:{
+      testSingleTest();
+      break;
+    }
+    default:
+      break;
   }
-//   fixParameters();  // 暂时都用默认的
-  openOutputStreams(option);
-	invokeTestSuite(option, streamFile.c_str());
-	fclose(freqfp);
   return 0;
 }

@@ -1,4 +1,5 @@
-
+#ifndef _GENERATORS_H_
+#define _GENERATORS_H_
 
 //#include	"../include/sha.h"
 
@@ -86,3 +87,5 @@ void	SHA1();
 	 B = A; \
 	 A = temp; \
 	 }
+
+#endif

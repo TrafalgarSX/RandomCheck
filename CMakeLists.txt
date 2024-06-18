@@ -2,15 +2,18 @@
 # cmakelists  demo 
 
 cmake_minimum_required(VERSION 3.22)
-project(gen_sign_checklist_util)
+project(randomCheck)
 
 # set cxx standard 
-set(CXX_STANDARD_REQUIRED)
-set(CMAKE_CXX_STANDARD 11)
+# set(CXX_STANDARD_REQUIRED)
+# set(CMAKE_CXX_STANDARD 11)
 
 list(APPEND lib_src 
+
+                    ${PROJECT_SOURCE_DIR}/src/randomAllCheck.cpp
                     # tool
                     ${PROJECT_SOURCE_DIR}/src/cephes.c
+                    ${PROJECT_SOURCE_DIR}/src/globalVar.c
                     ${PROJECT_SOURCE_DIR}/src/utilities.c
 
                     # nist
@@ -39,10 +42,10 @@ list(APPEND lib_src
                     ${PROJECT_SOURCE_DIR}/src/discreteFourierTransform.c
 
                     # gb/t
-                    ${PROJECT_SOURCE_DIR}/src/discreteFourierTransform.c
-                    ${PROJECT_SOURCE_DIR}/src/discreteFourierTransform.c
-                    ${PROJECT_SOURCE_DIR}/src/discreteFourierTransform.c
-                    ${PROJECT_SOURCE_DIR}/src/discreteFourierTransform.c
+                    ${PROJECT_SOURCE_DIR}/src/autoCorrelation.c
+                    ${PROJECT_SOURCE_DIR}/src/binaryDerivative.c
+                    ${PROJECT_SOURCE_DIR}/src/poker.c
+                    ${PROJECT_SOURCE_DIR}/src/runsDistribution.c
                    )
 
 list(APPEND exe_src 
@@ -53,7 +56,8 @@ list(APPEND include_dir ${PROJECT_SOURCE_DIR}/include
                    )
 
 add_library(${PROJECT_NAME}s STATIC ${lib_src})
-target_include_directories(${PROJECT_NAME}s PRIVATE ${include_dir})
+target_include_directories(${PROJECT_NAME}s PUBLIC ${include_dir})
 
 add_executable(${PROJECT_NAME} ${exe_src})
-target_include_directories(${PROJECT_NAME} PRIVATE ${include_dir})
+target_include_directories(${PROJECT_NAME} PUBLIC ${include_dir})
+target_link_libraries(${PROJECT_NAME} PUBLIC ${PROJECT_NAME}s)

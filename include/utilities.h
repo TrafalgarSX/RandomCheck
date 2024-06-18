@@ -9,7 +9,7 @@ int		generatorOptions(char** streamFile);
 void	chooseTests();
 void	fixParameters();
 void	fileBasedBitStreams(const char *streamFile);
-void	readBinaryDigitsInASCIIFormat(FILE *fp, char *streamFile);
+void	readBinaryDigitsInASCIIFormat(FILE *fp, const char *streamFile);
 void	readHexDigitsInBinaryFormat(FILE *fp);
 int		convertToBits(uint8_t *x, int xBitLength, int bitsNeeded, int *num_0s, int *num_1s, int *bitsRead);
 void	openOutputStreams(int option);

@@ -5,9 +5,10 @@
 
 #include <externs.h>
 #include <cephes.h>
+#include <stdbool.h>
 
 
-void Poker(int m, int n)
+bool Poker(int m, int n)
 {
 	int i = 0;
 	int j = 0;
@@ -25,7 +26,7 @@ void Poker(int m, int n)
 	if(Array == NULL)
 	{
 		printf("Poker Test: Insufficient memory for calloc!\n");
-		return ;
+		return false;
 	}
 
 	for(i = 0;i < nNArraySize; ++i)
@@ -56,19 +57,6 @@ void Poker(int m, int n)
 	//free
 	if(Array != NULL) free(Array);
 
-  fprintf(stats[TEST_POKER], "\t\t\t       POKER TEST\n");
-  fprintf(stats[TEST_POKER], "\t\t---------------------------------------------\n");
-  fprintf(stats[TEST_POKER], "\t\t COMPUTATIONAL INFORMATION:      \n");
-  fprintf(stats[TEST_POKER], "\t\t---------------------------------------------\n");
-  fprintf(stats[TEST_POKER], "\t\t(a) m                   = %d\n", m);
-  fprintf(stats[TEST_POKER], "\t\t(b) blocksNumber        = %d\n", nBlocksNumber);
-  fprintf(stats[TEST_POKER], "\t\t(c) nNArraySize         = %d\n", nNArraySize);
-  fprintf(stats[TEST_POKER], "\t\t(d) sum                 = %f\n", sum);
-  fprintf(stats[TEST_POKER], "\t\t---------------------------------------------\n");
-
-  fprintf(stats[TEST_POKER], "%s\t\tp_value = %f\n", dPValue < ALPHA ? "FAILURE" : "SUCCESS", dPValue);
-  fprintf(results[TEST_POKER], "%f\n", dPValue);
-  fflush(stats[TEST_POKER]);
-  fflush(results[TEST_POKER]);
+  return dPValue < ALPHA ? false : true;
 
 }

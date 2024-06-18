@@ -2,9 +2,10 @@
 #include <math.h>
 #include <string.h>
 #include <stdlib.h>
-#include "../include/externs.h"
-#include "../include/utilities.h"
-#include "../include/cephes.h"
+#include <externs.h>
+#include <utilities.h>
+#include <cephes.h>
+#include <stdbool.h>
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
          D I S C R E T E  F O U R I E R  T R A N S F O R M  T E S T 
@@ -12,7 +13,7 @@
 void  __ogg_fdrffti(int n, double *wsave, int *ifac);
 void  __ogg_fdrfftf(int n, double *X, double *wsave, int *ifac);
 
-void
+bool
 DiscreteFourierTransform(int n)
 {
 	double	p_value, upperBound, percentile, N_l, N_o, d, *m = NULL, *X = NULL, *wsave = NULL;
@@ -28,7 +29,7 @@ DiscreteFourierTransform(int n)
 				free(wsave);
 			if( m != NULL )
 				free(m);
-			return;
+			return false;
 	}
 	for ( i=0; i<n; i++ )
 		X[i] = 2*(int)epsilon[i] - 1;
@@ -51,20 +52,10 @@ DiscreteFourierTransform(int n)
 	d = (N_l - N_o)/sqrt(n/4.0*0.95*0.05);
 	p_value = erfc(fabs(d)/sqrt(2.0));
 
-	fprintf(stats[TEST_FFT], "\t\t\t\tFFT TEST\n");
-	fprintf(stats[TEST_FFT], "\t\t-------------------------------------------\n");
-	fprintf(stats[TEST_FFT], "\t\tCOMPUTATIONAL INFORMATION:\n");
-	fprintf(stats[TEST_FFT], "\t\t-------------------------------------------\n");
-	fprintf(stats[TEST_FFT], "\t\t(a) Percentile = %f\n", percentile);
-	fprintf(stats[TEST_FFT], "\t\t(b) N_l        = %f\n", N_l);
-	fprintf(stats[TEST_FFT], "\t\t(c) N_o        = %f\n", N_o);
-	fprintf(stats[TEST_FFT], "\t\t(d) d          = %f\n", d);
-	fprintf(stats[TEST_FFT], "\t\t-------------------------------------------\n");
-
-	fprintf(stats[TEST_FFT], "%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value);
-	fprintf(results[TEST_FFT], "%f\n", p_value);
 
 	free(X);
 	free(wsave);
 	free(m);
+
+    return p_value < ALPHA ? false : true;
 }

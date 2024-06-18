@@ -1,13 +1,14 @@
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
+#include <stdbool.h>
 #include "../include/externs.h"
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
                           F R E Q U E N C Y  T E S T
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-void
+bool
 Frequency(int n)
 {
 	int		i;
@@ -20,14 +21,6 @@ Frequency(int n)
 	f = s_obs/sqrt2;
 	p_value = erfc(f);
 
-	fprintf(stats[TEST_FREQUENCY], "\t\t\t      FREQUENCY TEST\n");
-	fprintf(stats[TEST_FREQUENCY], "\t\t---------------------------------------------\n");
-	fprintf(stats[TEST_FREQUENCY], "\t\tCOMPUTATIONAL INFORMATION:\n");
-	fprintf(stats[TEST_FREQUENCY], "\t\t---------------------------------------------\n");
-	fprintf(stats[TEST_FREQUENCY], "\t\t(a) The nth partial sum = %d\n", (int)sum);
-	fprintf(stats[TEST_FREQUENCY], "\t\t(b) S_n/n               = %f\n", sum/n);
-	fprintf(stats[TEST_FREQUENCY], "\t\t---------------------------------------------\n");
 
-	fprintf(stats[TEST_FREQUENCY], "%s\t\tp_value = %f\n\n", p_value < ALPHA ? "FAILURE" : "SUCCESS", p_value); fflush(stats[TEST_FREQUENCY]);
-	fprintf(results[TEST_FREQUENCY], "%f\n", p_value); fflush(results[TEST_FREQUENCY]);
+    return p_value < ALPHA ? 0 : 1;
 }

@@ -2,11 +2,12 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
-#include "../include/externs.h"
-#include "../include/cephes.h"
+#include <externs.h>
+#include <cephes.h>
+#include <stdbool.h>
 
 //游程分布检测
-void RunsDistribution(int n)
+bool RunsDistribution(int n)
 {
 	int i = 0;
 	int j = 0;
@@ -32,8 +33,8 @@ void RunsDistribution(int n)
 	if(b == NULL)
 	{
 		printf("\tRUNSDISTRIBUTION TESTS ABORTED DUE TO ONE OF THE FOLLWING : \n");
-    printf("\tInsufficient memory for calloc b. \n");
-		return ;
+        printf("\tInsufficient memory for calloc b. \n");
+		return false;
 	}
 
 	g = (unsigned int*)calloc(k, sizeof(unsigned int));
@@ -41,8 +42,8 @@ void RunsDistribution(int n)
 	{
 		if(b != NULL) free(b);
 		printf("\tRUNSDISTRIBUTION TESTS ABORTED DUE TO ONE OF THE FOLLWING : \n");
-    printf("\tInsufficient memory for calloc g. \n");
-		return ;
+        printf("\tInsufficient memory for calloc g. \n");
+		return false;
 	}
 	
 	for(i = 1;i <= k; ++i)
@@ -119,17 +120,7 @@ void RunsDistribution(int n)
 	if(b != NULL) free(b);
 	if(g != NULL) free(g);
 	
-  fprintf(stats[TEST_RUNSDISTRIBUTION], "\t\tRUNS DISTRIBUTION TEST\n");
-  fprintf(stats[TEST_RUNSDISTRIBUTION], "\t\t------------------------------------------\n");
-  fprintf(stats[TEST_RUNSDISTRIBUTION], "\t\tCOMPUTATIONAL INFORMATION:\n");
-  fprintf(stats[TEST_RUNSDISTRIBUTION], "\t\t------------------------------------------\n");
-  fprintf(stats[TEST_RUNSDISTRIBUTION], "\t\t(a) k                        = %d\n", k);
-  fprintf(stats[TEST_RUNSDISTRIBUTION], "\t\t(b) sum                      = %f\n", sum);
-  fprintf(stats[TEST_RUNSDISTRIBUTION], "\t\t------------------------------------------\n");
 
-  fprintf(stats[TEST_RUNSDISTRIBUTION], "%s\t\t p_value = %f\n", dPValue < ALPHA ? "FAILURE" : "SUCCESS", dPValue);
-  fflush(stats[TEST_RUNSDISTRIBUTION]);
-  fprintf(results[TEST_RUNSDISTRIBUTION], "%f\n", dPValue);
-  fflush(results[TEST_RUNSDISTRIBUTION]);  
-  return;
+
+  return dPValue < ALPHA ? false : true;
 }

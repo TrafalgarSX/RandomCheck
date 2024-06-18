@@ -4,15 +4,14 @@
 #include <string.h>
 #include <cephes.h>
 #include <externs.h>
+#include <stdbool.h>
 
-void AutoCorrelation(int d, int n)
+bool AutoCorrelation(int d, int n)
 {
 	int i = 0;
 	double sum = 0.0;
 	double dPValue = 0.0;
 	double dSqrt2 = 1.41421356237309504880;
-	
-	
 	
 	for(i = 0;i < n - d; ++i)
 	{
@@ -24,19 +23,5 @@ void AutoCorrelation(int d, int n)
 	sum /= sqrt(n - d);
 	dPValue = cephes_erfc(fabs(sum) / dSqrt2);
 
-
-  fprintf(stats[TEST_AUTOCORRELATION], "\t\t\tAUTOCORRELATION TEST\n");
-  fprintf(stats[TEST_AUTOCORRELATION], "\t\t---------------------------------------------\n");
-  fprintf(stats[TEST_AUTOCORRELATION], "\t\tCOMPUTATIONAL INFORMATION:\n");
-  fprintf(stats[TEST_AUTOCORRELATION], "\t\t---------------------------------------------\n");
-  fprintf(stats[TEST_AUTOCORRELATION], "\t\t(a) d               = %d\n", d);
-  fprintf(stats[TEST_AUTOCORRELATION], "\t\t(b) sum             = %f\n", sum);
-  
-  fprintf(stats[TEST_AUTOCORRELATION], "\t\t---------------------------------------------\n");
-
-  fprintf(stats[TEST_AUTOCORRELATION], "%s\t\tp_value = %f\n\n", dPValue < ALPHA ? "FAILURE" : "SUCCESS", dPValue);
-  fflush(stats[TEST_AUTOCORRELATION]);
-  fprintf(results[TEST_AUTOCORRELATION], "%f\n", dPValue);
-  fflush(results[TEST_AUTOCORRELATION]);
-
+    return dPValue < ALPHA ? false : true;
 }

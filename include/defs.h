@@ -39,10 +39,10 @@
 #define	TEST_APEN						10
 #define	TEST_LINEARCOMPLEXITY			11
 
-#define	TEST_POKER				        14
-#define	TEST_AUTOCORRELATION	        15
-#define	TEST_BINARYDERIVATIVE        	16
-#define	TEST_RUNSDISTRIBUTION           17
+#define	TEST_POKER				        12
+#define	TEST_AUTOCORRELATION	        13
+#define	TEST_BINARYDERIVATIVE        	14
+#define	TEST_RUNSDISTRIBUTION           15
 
 
 

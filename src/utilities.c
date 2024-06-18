@@ -257,7 +257,7 @@ fileBasedBitStreams(const char *streamFile)
 
 
 void
-readBinaryDigitsInASCIIFormat(FILE *fp, char *streamFile)
+readBinaryDigitsInASCIIFormat(FILE *fp, const char *streamFile)
 {
 	int		i, j, num_0s, num_1s, bitsRead, bit;
 	
@@ -463,48 +463,75 @@ invokeTestSuite(int option, const char *streamFile)
 void
 nist_test_suite()
 {
-	if ( (testVector[0] == 1) || (testVector[TEST_FREQUENCY] == 1) ) 
+	if ( (testVector[0] == 1) || (testVector[TEST_FREQUENCY] == 1) ) {
 		Frequency(tp.n);
+    }
 	
-	if ( (testVector[0] == 1) || (testVector[TEST_BLOCK_FREQUENCY] == 1) ) 
+	if ( (testVector[0] == 1) || (testVector[TEST_BLOCK_FREQUENCY] == 1) ) {
 		BlockFrequency(tp.blockFrequencyBlockLength, tp.n);
+    }
 	
-	if ( (testVector[0] == 1) || (testVector[TEST_CUSUM] == 1) )
+	if ( (testVector[0] == 1) || (testVector[TEST_CUSUM] == 1) ) {
 		CumulativeSums(tp.n);
+    }
 	
-	if ( (testVector[0] == 1) || (testVector[TEST_RUNS] == 1) )
+	if ( (testVector[0] == 1) || (testVector[TEST_RUNS] == 1) ) {
 		Runs(tp.n); 
+    }
 	
-	if ( (testVector[0] == 1) || (testVector[TEST_LONGEST_RUN] == 1) )
+	if ( (testVector[0] == 1) || (testVector[TEST_LONGEST_RUN] == 1) ) {
 		LongestRunOfOnes(tp.n);
+    }
 	
-	if ( (testVector[0] == 1) || (testVector[TEST_RANK] == 1) )
+	if ( (testVector[0] == 1) || (testVector[TEST_RANK] == 1) ) {
 		Rank(tp.n);
+    }
 	
-	if ( (testVector[0] == 1) || (testVector[TEST_FFT] == 1) )
+	if ( (testVector[0] == 1) || (testVector[TEST_FFT] == 1) ) {
 		DiscreteFourierTransform(tp.n);
+    }
 	
-	if ( (testVector[0] == 1) || (testVector[TEST_NONPERIODIC] == 1) )
-		NonOverlappingTemplateMatchings(tp.nonOverlappingTemplateBlockLength, tp.n);
-	
-	if ( (testVector[0] == 1) || (testVector[TEST_OVERLAPPING] == 1) )
+	if ( (testVector[0] == 1) || (testVector[TEST_OVERLAPPING] == 1) ) {
 		OverlappingTemplateMatchings(tp.overlappingTemplateBlockLength, tp.n);
+    }
 	
-	if ( (testVector[0] == 1) || (testVector[TEST_UNIVERSAL] == 1) )
+	if ( (testVector[0] == 1) || (testVector[TEST_UNIVERSAL] == 1) ) {
 		Universal(tp.n);
+    }
 	
-	if ( (testVector[0] == 1) || (testVector[TEST_APEN] == 1) )
+	if ( (testVector[0] == 1) || (testVector[TEST_APEN] == 1) ) {
 		ApproximateEntropy(tp.approximateEntropyBlockLength, tp.n);
-	
-	if ( (testVector[0] == 1) || (testVector[TEST_RND_EXCURSION] == 1) )
-		RandomExcursions(tp.n);
-	
-	if ( (testVector[0] == 1) || (testVector[TEST_RND_EXCURSION_VAR] == 1) )
-		RandomExcursionsVariant(tp.n);
-	
-	if ( (testVector[0] == 1) || (testVector[TEST_SERIAL] == 1) )
-		Serial(tp.serialBlockLength,tp.n);
-	
-	if ( (testVector[0] == 1) || (testVector[TEST_LINEARCOMPLEXITY] == 1) )
+    }
+
+	if ( (testVector[0] == 1) || (testVector[TEST_LINEARCOMPLEXITY] == 1) ) {
 		LinearComplexity(tp.linearComplexitySequenceLength, tp.n);
+    }
+
+	if ( (testVector[0] == 1) || (testVector[TEST_POKER] == 1) ) {
+        if ( tp.n >  (320 * 8) )  // 大于320bytes时，只检测m=4, 8
+        {
+            Poker(4, tp.n);
+            Poker(8, tp.n);
+        }
+        else {        //不大于320bytes时，只检测m=2
+            Poker(2, tp.n);
+        }
+    }
+
+	if ( (testVector[0] == 1) || (testVector[TEST_AUTOCORRELATION] == 1) ) {
+        AutoCorrelation(1, tp.n);
+		AutoCorrelation(2, tp.n);
+		AutoCorrelation(8, tp.n);
+		AutoCorrelation(16, tp.n);
+    }
+
+	if ( (testVector[0] == 1) || (testVector[TEST_BINARYDERIVATIVE] == 1) ) {
+        BinaryDerivative(3, tp.n);
+        BinaryDerivative(7, tp.n);
+    }
+
+	if ( (testVector[0] == 1) || (testVector[TEST_RUNSDISTRIBUTION] == 1) ) {
+        RunsDistribution(tp.n);
+    }
+
 }

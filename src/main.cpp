@@ -15,7 +15,8 @@ int main(int argc, const char **argv) {
   bits_length = std::atoi(argv[1]); // arg2
   std::string streamFile = argv[2]; // arg 1
 
-  tp.blockFrequencyBlockLength = 128;
+//   tp.blockFrequencyBlockLength = 128; // nist
+  tp.blockFrequencyBlockLength = 100; // gm
   tp.overlappingTemplateBlockLength = 9;
   tp.approximateEntropyBlockLength = 10;
   tp.linearComplexitySequenceLength = 500;

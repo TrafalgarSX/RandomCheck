@@ -5,8 +5,9 @@
 #include <externs.h>
 #include <utilities.h>
 #include <cephes.h>
+#include <stdbool.h>
 
-void BinaryDerivative(int k, int n)
+bool BinaryDerivative(int k, int n)
 {
 	int i = 0;
 	int j = 0;
@@ -16,11 +17,11 @@ void BinaryDerivative(int k, int n)
 	unsigned char* newSequence = NULL;
 	
 	//create new Sequence
-  newSequence = (unsigned char*)calloc(n, sizeof(unsigned char));
+    newSequence = (unsigned char*)calloc(n, sizeof(unsigned char));
 	if(newSequence == NULL)
 	{
-	  printf("BinaryDerivative Test: Insufficient memory for calloc!");
-		return;
+        printf("BinaryDerivative Test: Insufficient memory for calloc!");
+		return false;
 	}
 	
 	//copy binary stream
@@ -29,7 +30,6 @@ void BinaryDerivative(int k, int n)
 		newSequence[i] = epsilon[i];
 	}
 	
-	//���k�εõ�������
 	for(i = 0;i < k; ++i)
 	{
 		for(j = 0;j < (n - k - 1); ++j)
@@ -56,17 +56,6 @@ void BinaryDerivative(int k, int n)
 	sum = sum / sqrt(n - k);
 	
 	dPValue = erfc(fabs(sum) / dSqrt2);
-	
-  fprintf(stats[TEST_BINARYDERIVATIVE], "\t\t\tBINARY DERIVATIVE TEST\n");
-  fprintf(stats[TEST_BINARYDERIVATIVE], "\t\t---------------------------------------------\n");
-  fprintf(stats[TEST_BINARYDERIVATIVE], "\t\tCOMPUTATIONAL INFORMATION:\n");
-  fprintf(stats[TEST_BINARYDERIVATIVE], "\t\t---------------------------------------------\n");
-  fprintf(stats[TEST_BINARYDERIVATIVE], "\t\t(a) k               = %d\n", k);
-  fprintf(stats[TEST_BINARYDERIVATIVE], "\t\t(a) sum             = %f\n", sum);
-  fprintf(stats[TEST_BINARYDERIVATIVE], "\t\t---------------------------------------------\n");
 
-  fprintf(stats[TEST_BINARYDERIVATIVE], "%s\t\tp_value = %f\n\n", dPValue < ALPHA ? "FAILURE": "SUCCESS", dPValue); 
-  fflush(stats[TEST_BINARYDERIVATIVE]);
-  fprintf(results[TEST_BINARYDERIVATIVE], "%f\n", dPValue); 
-  fflush(results[TEST_BINARYDERIVATIVE]);
+    return dPValue < ALPHA ? false : true;
 }

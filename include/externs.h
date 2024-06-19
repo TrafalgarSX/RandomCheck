@@ -1,5 +1,8 @@
+#ifndef _EXTERNS_H_
+#define _EXTERNS_H_
 
-#include "../include/defs.h"
+#include <defs.h>
+#include <stdio.h>
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
                    G L O B A L   D A T A  S T R U C T U R E S 
@@ -15,3 +18,4 @@ extern int			testVector[NUMOFTESTS+1];
 
 extern char	generatorDir[NUMOFGENERATORS][20];
 extern char	testNames[NUMOFTESTS+1][32];
+#endif // _EXTERNS_H_

@@ -6,10 +6,12 @@ U T I L I T I E S
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
-#include "../include/externs.h"
-#include "../include/utilities.h"
-#include "../include/generators.h"
-#include "../include/stat_fncs.h"
+#include <stdbool.h>
+#include <externs.h>
+#include <utilities.h>
+#include <generators.h>
+#include <stat_fncs.h>
+#include <decls.h>
 
 int
 displayGeneratorOptions()
@@ -137,6 +139,7 @@ chooseTests()
 void
 fixParameters()
 {
+#if 0
 	int		counter, testid;
 	
 	//  Check to see if any parameterized tests are selected
@@ -222,25 +225,19 @@ fixParameters()
 			}
 		}
 	} while ( testid != 0 );
+#endif
 }
 
 
-void
-fileBasedBitStreams(const char *streamFile)
+bool
+fileBasedBitStreams(const char *streamFile, int mode)
 {
 	FILE	*fp;
-	int		mode;
 	
-	printf("   Input File Format:\n");
-	printf("    [0] ASCII - A sequence of ASCII 0's and 1's\n");
-	printf("    [1] Binary - Each byte in data file contains 8 bits of data\n\n");
-	printf("   Select input mode:  ");
-	scanf("%1d", &mode);
-	printf("\n");
 	if ( mode == 0 ) {
 		if ( (fp = fopen(streamFile, "r")) == NULL ) {
 			printf("ERROR IN FUNCTION fileBasedBitStreams:  file %s could not be opened.\n",  streamFile);
-			exit(-1);
+			return false;
 		}
 		readBinaryDigitsInASCIIFormat(fp, streamFile);
 		fclose(fp);
@@ -248,11 +245,13 @@ fileBasedBitStreams(const char *streamFile)
 	else if ( mode == 1 ) {
 		if ( (fp = fopen(streamFile, "rb")) == NULL ) {
 			printf("ERROR IN FUNCTION fileBasedBitStreams:  file %s could not be opened.\n", streamFile);
-			exit(-1);
+			return false;
 		}
 		readHexDigitsInBinaryFormat(fp);
 		fclose(fp);
 	}
+
+	return true;
 }
 
 
@@ -294,7 +293,7 @@ readBinaryDigitsInASCIIFormat(FILE *fp, const char *streamFile)
 }
 
 
-void
+bool 
 readHexDigitsInBinaryFormat(FILE *fp)
 {
 	int		i, done, num_0s, num_1s, bitsRead;
@@ -302,7 +301,7 @@ readHexDigitsInBinaryFormat(FILE *fp)
 	
 	if ( (epsilon = (BitSequence *) calloc(tp.n,sizeof(BitSequence))) == NULL ) {
 		printf("BITSTREAM DEFINITION:  Insufficient memory available.\n");
-		return;
+		return false;
 	}
 
 	printf("     Statistical Testing In Progress.........\n\n");   
@@ -315,16 +314,16 @@ readHexDigitsInBinaryFormat(FILE *fp)
 			if ( fread(buffer, sizeof(unsigned char), 4, fp) != 4 ) {
 				printf("READ ERROR:  Insufficient data in file.\n");
 				free(epsilon);
-				return;
+				return false;
 			}
 			done = convertToBits(buffer, 32, tp.n, &num_0s, &num_1s, &bitsRead);
 		} while ( !done );
-		fprintf(freqfp, "\t\tBITSREAD = %d 0s = %d 1s = %d\n", bitsRead, num_0s, num_1s);
 		
 		nist_test_suite();
-		
 	}
 	free(epsilon);
+
+	return true;
 }
 
 
@@ -409,19 +408,24 @@ openOutputStreams(int option)
 	printf("\n");
 }
 
+bool startTestSuite(const char *streamFile, int mode) {
+
+	if(fileBasedBitStreams(streamFile, mode)) {
+		return true;
+	}else{
+		return false;
+	}
+}
 
 void
-invokeTestSuite(int option, const char *streamFile)
+invokeTestSuite(int option, const char *streamFile, int mode)
 {
-	fprintf(freqfp, "________________________________________________________________________________\n\n");
-	fprintf(freqfp, "\t\tFILE = %s\t\tALPHA = %6.4f\n", streamFile, ALPHA);
-	fprintf(freqfp, "________________________________________________________________________________\n\n");
 	if ( option != 0 )
-		printf("     Statistical Testing In Progress.........\n\n");
 	switch( option ) {
 		case 0:
-			fileBasedBitStreams(streamFile);
+			fileBasedBitStreams(streamFile, mode);
 			break;
+		#if 0
 		case 1:
 			lcg();
 			break;
@@ -449,7 +453,7 @@ invokeTestSuite(int option, const char *streamFile)
 		case 9:
 			SHA1();
 			break;
-			
+		#endif	
 		/* INTRODUCE NEW PSEUDO RANDOM NUMBER GENERATORS HERE */
 			
 		default:
@@ -464,74 +468,77 @@ void
 nist_test_suite()
 {
 	if ( (testVector[0] == 1) || (testVector[TEST_FREQUENCY] == 1) ) {
-		Frequency(tp.n);
+		Frequency(tp.n) ? testResults[TEST_FREQUENCY]++ : 0;
     }
 	
 	if ( (testVector[0] == 1) || (testVector[TEST_BLOCK_FREQUENCY] == 1) ) {
-		BlockFrequency(tp.blockFrequencyBlockLength, tp.n);
+		BlockFrequency(tp.blockFrequencyBlockLength, tp.n) ? testResults[TEST_BLOCK_FREQUENCY]++ : 0;
     }
 	
 	if ( (testVector[0] == 1) || (testVector[TEST_CUSUM] == 1) ) {
-		CumulativeSums(tp.n);
+		CumulativeSums(tp.n) ? testResults[TEST_CUSUM]++ : 0;
     }
 	
 	if ( (testVector[0] == 1) || (testVector[TEST_RUNS] == 1) ) {
-		Runs(tp.n); 
+		Runs(tp.n) ? testResults[TEST_RUNS]++ : 0;
     }
 	
 	if ( (testVector[0] == 1) || (testVector[TEST_LONGEST_RUN] == 1) ) {
-		LongestRunOfOnes(tp.n);
+		LongestRunOfOnes(tp.n) ? testResults[TEST_LONGEST_RUN]++ : 0;
     }
 	
 	if ( (testVector[0] == 1) || (testVector[TEST_RANK] == 1) ) {
-		Rank(tp.n);
+		Rank(tp.n) ? testResults[TEST_RANK]++ : 0;
     }
 	
 	if ( (testVector[0] == 1) || (testVector[TEST_FFT] == 1) ) {
-		DiscreteFourierTransform(tp.n);
+		DiscreteFourierTransform(tp.n) ? testResults[TEST_FFT]++ : 0;
     }
 	
 	if ( (testVector[0] == 1) || (testVector[TEST_OVERLAPPING] == 1) ) {
-		OverlappingTemplateMatchings(tp.overlappingTemplateBlockLength, tp.n);
+		OverlappingTemplateMatchings(tp.overlappingTemplateBlockLength, tp.n) ? testResults[TEST_OVERLAPPING]++ : 0;
     }
 	
 	if ( (testVector[0] == 1) || (testVector[TEST_UNIVERSAL] == 1) ) {
-		Universal(tp.n);
+		Universal(tp.n) ? testResults[TEST_UNIVERSAL]++ : 0;
     }
 	
 	if ( (testVector[0] == 1) || (testVector[TEST_APEN] == 1) ) {
-		ApproximateEntropy(tp.approximateEntropyBlockLength, tp.n);
+		ApproximateEntropy(tp.approximateEntropyBlockLength, tp.n) ? testResults[TEST_APEN]++ : 0;
     }
 
 	if ( (testVector[0] == 1) || (testVector[TEST_LINEARCOMPLEXITY] == 1) ) {
-		LinearComplexity(tp.linearComplexitySequenceLength, tp.n);
+		LinearComplexity(tp.linearComplexitySequenceLength, tp.n) ? testResults[TEST_LINEARCOMPLEXITY]++ : 0;
     }
 
 	if ( (testVector[0] == 1) || (testVector[TEST_POKER] == 1) ) {
         if ( tp.n >  (320 * 8) )  // 大于320bytes时，只检测m=4, 8
         {
-            Poker(4, tp.n);
-            Poker(8, tp.n);
+            (Poker(4, tp.n) &&
+            Poker(8, tp.n)) ? testResults[TEST_POKER]++ : 0;
         }
         else {        //不大于320bytes时，只检测m=2
-            Poker(2, tp.n);
+            Poker(2, tp.n) ? testResults[TEST_POKER]++ : 0;
         }
     }
 
 	if ( (testVector[0] == 1) || (testVector[TEST_AUTOCORRELATION] == 1) ) {
-        AutoCorrelation(1, tp.n);
-		AutoCorrelation(2, tp.n);
-		AutoCorrelation(8, tp.n);
-		AutoCorrelation(16, tp.n);
+        (AutoCorrelation(1, tp.n) &&
+		AutoCorrelation(2, tp.n) && 
+		AutoCorrelation(8, tp.n) &&
+		AutoCorrelation(16, tp.n)) ? testResults[TEST_AUTOCORRELATION]++ : 0;
     }
 
 	if ( (testVector[0] == 1) || (testVector[TEST_BINARYDERIVATIVE] == 1) ) {
-        BinaryDerivative(3, tp.n);
-        BinaryDerivative(7, tp.n);
+        (BinaryDerivative(3, tp.n) && BinaryDerivative(7, tp.n)) ? testResults[TEST_BINARYDERIVATIVE]++ : 0;
     }
 
 	if ( (testVector[0] == 1) || (testVector[TEST_RUNSDISTRIBUTION] == 1) ) {
-        RunsDistribution(tp.n);
+        RunsDistribution(tp.n) ? testResults[TEST_RUNSDISTRIBUTION]++ : 0;
     }
+
+	for(int i = 1; i < NUMOFTESTS + 1; i++) {
+		testResults[i] += 1;
+	}
 
 }

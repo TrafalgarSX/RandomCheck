@@ -1,23 +1,25 @@
 
-#include "../include/defs.h"
+#ifndef _DECLS_H_
+#define _DECLS_H_
+
+#include <defs.h>
 #include <stdio.h>
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
                    G L O B A L   D A T A  S T R U C T U R E S 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-BitSequence	*epsilon;				// BIT STREAM
-TP			tp;						// TEST PARAMETER STRUCTURE
-int		    bits_length;  // n
-FILE		*stats[NUMOFTESTS+1];	// FILE OUTPUT STREAM
-FILE		*results[NUMOFTESTS+1];	// FILE OUTPUT STREAM
-FILE		*freqfp;				// FILE OUTPUT STREAM
-FILE		*summary;				// FILE OUTPUT STREAM
-int			testVector[NUMOFTESTS+1];
+extern BitSequence	*epsilon;				// BIT STREAM
+extern TP			tp;						// TEST PARAMETER STRUCTURE
+extern int		    bits_length;  // n
+extern FILE		*stats[NUMOFTESTS+1];	// FILE OUTPUT STREAM
+extern FILE		*results[NUMOFTESTS+1];	// FILE OUTPUT STREAM
+extern FILE		*freqfp;				// FILE OUTPUT STREAM
+extern FILE		*summary;				// FILE OUTPUT STREAM
+extern int			testVector[NUMOFTESTS+1];
+extern int			testResults[NUMOFTESTS+1];
 
-char	generatorDir[NUMOFGENERATORS][20] = { "AlgorithmTesting", "LCG", "QCG1", "QCG2","CCG", "XOR",
-			"MODEXP", "BBS", "MS", "G-SHA1" };
+extern char	generatorDir[NUMOFGENERATORS][20];
 				
-char	testNames[NUMOFTESTS+1][32] = { " ", "Frequency", "BlockFrequency", "CumulativeSums", "Runs", "LongestRun", "Rank",
-			"FFT", "OverlappingTemplate", "Universal", "ApproximateEntropy", "LinearComplexity",
-            "POKER", "AUTOCORELATION", "BINARYDERIVATIVE", "RUNSDISTRIBUTION" };
+extern char	testNames[NUMOFTESTS+1][32];
+#endif // _DECLS_H_

@@ -1,3 +1,6 @@
+#ifndef _DEFS_H_
+#define _DEFS_H_
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
                        D E B U G G I N G  A I D E S
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -62,3 +65,5 @@ typedef struct _testParameters {
 	int		approximateEntropyBlockLength;
 	int		numOfBitStreams;
 } TP;
+
+#endif // _DEFS_H_

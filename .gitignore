@@ -1,4 +1,5 @@
 .cache/
 VS2022-amd64/
-
+build/
 compile_commands.json
+test.dat

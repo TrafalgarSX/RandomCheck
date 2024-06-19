@@ -2,26 +2,32 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
      S T A T I S T I C A L  T E S T  F U N C T I O N  P R O T O T Y P E S 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-void	Frequency(int n);
-void	BlockFrequency(int M, int n);
-void	CumulativeSums(int n);
-void	Runs(int n);
-void	LongestRunOfOnes(int n);
-void	Rank(int n);
-void	DiscreteFourierTransform(int n);
-void	NonOverlappingTemplateMatchings(int m, int n);
-void	OverlappingTemplateMatchings(int m, int n);
-void	Universal(int n);
-void	ApproximateEntropy(int m, int n);
-void	RandomExcursions(int n);
-void	RandomExcursionsVariant(int n);
-void	LinearComplexity(int M, int n);
-void	Serial(int m, int n);
-
-void Poker(int m, int n);
-void RunsDistribution(int n);
-void BinaryDerivative(int k, int n);
-void AutoCorrelation(int d, int n);
+#ifndef _STAT_FNS_H_
+#define _STAT_FNS_H_
 
 
+ #include <stdbool.h>
+
+bool	Frequency(int n);
+bool	BlockFrequency(int M, int n);
+bool	CumulativeSums(int n);
+bool	Runs(int n);
+bool	LongestRunOfOnes(int n);
+bool	Rank(int n);
+bool	DiscreteFourierTransform(int n);
+bool	NonOverlappingTemplateMatchings(int m, int n);
+bool	OverlappingTemplateMatchings(int m, int n);
+bool	Universal(int n);
+bool	ApproximateEntropy(int m, int n);
+bool	RandomExcursions(int n);
+bool	RandomExcursionsVariant(int n);
+bool	LinearComplexity(int M, int n);
+bool	Serial(int m, int n);
+
+bool Poker(int m, int n);
+bool RunsDistribution(int n);
+bool BinaryDerivative(int k, int n);
+bool AutoCorrelation(int d, int n);
+
+
+#endif // _STAT_FNS_H_
